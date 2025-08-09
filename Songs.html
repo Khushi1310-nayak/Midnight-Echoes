@@ -4,13 +4,232 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Playlist</title>
+    <link rel="icon" sizes="32x32" type="image/png"
+        href="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png">
+
+    <title>My Playlist - Songs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    
+    <style>
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .music-player {
+            background: rgba(20, 20, 30, 0.85);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-player::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            border-radius: 22px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .music-player:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .music-player:hover::before {
+            opacity: 1;
+        }
+
+        .music-player:hover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-10px);
+        }
+
+        .playing-from {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .album-art {
+            width: 220px;
+            height: 220px;
+            border: 3px solid white;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .track-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .track-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .track-artist {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            border-radius: 3px;
+            width: 35%;
+            position: relative;
+        }
+
+        .progress-knob {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: grab;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-knob:active {
+            cursor: grabbing;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            font-size: 11px;
+            position: relative;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .play-btn {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(135deg, #00cc6a, #00aa55);
+            transform: scale(1.08);
+        }
+
+        .control-icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .play-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        @media (max-width: 768px) {
+            .music-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .music-player {
+                padding: 20px;
+            }
+
+            .album-art {
+                width: 200px;
+                height: 200px;
+            }
+
+            .track-title {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-dark">
+<body style="background-color: #2c2c3a;">
     <nav class="navbar navbar-expand-lg bg-body-tertiary navbar bg-dark border-bottom border-body" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand text-danger">Midnight Echoes</a>
@@ -34,425 +253,409 @@
                         <a class="nav-link" href="Contact.html">Contact Me</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-danger" type="submit">Search</button>
-                </form>
+
             </div>
         </div>
     </nav>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 my-3 mx-3">
-        <div class="col">
-            <div class="card shadow-sm song-card">
-                <div class="card shadow-sm"><img
-                        src="https://i.pinimg.com/1200x/81/a2/9b/81a29b91a5f3ebfa08fb510a2fcf5471.jpg" alt=""
-                        class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice"
-                        role="img" width="100%"></div>
-                <div class="card-body">
-                    <p class="card-text text-danger h5">My Baby Angel</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+    <div class="container my-5">
+        <div class="music-grid">
+            <!-- Track 1 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>\
+
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/1200x/81/a2/9b/81a29b91a5f3ebfa08fb510a2fcf5471.jpg"
+                        alt="Track 1 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">My Baby Angel</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar1">
+                        <div class="progress-fill" id="progressFill1">
+                            <div class="progress-knob" id="progressKnob1"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime1">0:00</span>
+                        <span id="totalTime1">3:22</span>
                     </div>
                 </div>
-            </div>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#exampleModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="exampleModalLabel">My Baby Angel</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/1200x/81/a2/9b/81a29b91a5f3ebfa08fb510a2fcf5471.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn1">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">My Baby Angel</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn1">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon1">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon1" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio1" controls style="width: 100%;">
-                                    <source src="My Baby Angel.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn1">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"><img
-                    src="https://i.pinimg.com/1200x/dc/1c/7b/dc1c7baaacbddda55b9fd3487e8a1b92.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Made of Stardust & Fire</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 2 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/1200x/dc/1c/7b/dc1c7baaacbddda55b9fd3487e8a1b92.jpg"
+                        alt="Track 2 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Made of Stardust & Fire</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar2">
+                        <div class="progress-fill" id="progressFill2">
+                            <div class="progress-knob" id="progressKnob2"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime2">0:00</span>
+                        <span id="totalTime2">3:37</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#stardustModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="stardustModal" tabindex="-1" aria-labelledby="stardustModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="stardustModalLabel">Made of Stardust & Fire
-                            </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/1200x/dc/1c/7b/dc1c7baaacbddda55b9fd3487e8a1b92.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn2">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Made of Stardust & Fire</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn2">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon2">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon2" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio2" controls style="width: 100%;">
-                                    <source src="Made of stardust and fire.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn2">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/736x/25/2c/44/252c444a00b4d2089116c2822178804f.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Far Apart</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 3 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/736x/25/2c/44/252c444a00b4d2089116c2822178804f.jpg"
+                        alt="Track 3 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Far Apart</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar3">
+                        <div class="progress-fill" id="progressFill3">
+                            <div class="progress-knob" id="progressKnob3"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime3">0:00</span>
+                        <span id="totalTime3">3:13</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#FarModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="FarModal" tabindex="-1" aria-labelledby="FarModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="FarModalLabel">Far Apart</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/736x/25/2c/44/252c444a00b4d2089116c2822178804f.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn3">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Far Apart</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn3">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon3">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon3" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio3" controls style="width: 100%;">
-                                    <source src="Far Apart.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn3">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/736x/b9/91/b8/b991b8f94d35867a0d78799d985aaa6d.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">The Rose & The Heart</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 4 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/736x/b9/91/b8/b991b8f94d35867a0d78799d985aaa6d.jpg"
+                        alt="Track 4 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">The Rose & The Heart</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar4">
+                        <div class="progress-fill" id="progressFill4">
+                            <div class="progress-knob" id="progressKnob4"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime4">0:00</span>
+                        <span id="totalTime4">3:27</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#roseModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="roseModal" tabindex="-1" aria-labelledby="roseModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="roseModalLabel">The Rose & The Heart</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/736x/b9/91/b8/b991b8f94d35867a0d78799d985aaa6d.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn4">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">The Rose & The Heart</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn4">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon4">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon4" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio4" controls style="width: 100%;">
-                                    <source src="The Rose and The Heart.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn4">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/736x/0b/11/ab/0b11abe9d55b4fb2f476265ed124eb8c.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Midnight Drapes</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 5 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/736x/0b/11/ab/0b11abe9d55b4fb2f476265ed124eb8c.jpg"
+                        alt="Track 5 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Midnight Drapes</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar5">
+                        <div class="progress-fill" id="progressFill5">
+                            <div class="progress-knob" id="progressKnob5"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime5">0:00</span>
+                        <span id="totalTime5">2:24</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#midnightModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="midnightModal" tabindex="-1" aria-labelledby="midnightModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="midnightModalLabel">Midnight Drapes</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/736x/0b/11/ab/0b11abe9d55b4fb2f476265ed124eb8c.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn5">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Midnight Drapes</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn5">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon5">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon5" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio5" controls style="width: 100%;">
-                                    <source src="Midnight Drapes.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn5">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/1200x/d0/b3/70/d0b370ec90d87503f078bafb6107d60f.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Gold in the Wreckage</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 6 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/1200x/d0/b3/70/d0b370ec90d87503f078bafb6107d60f.jpg"
+                        alt="Track 6 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Gold In The Wreckage</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar6">
+                        <div class="progress-fill" id="progressFill6">
+                            <div class="progress-knob" id="progressKnob6"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime6">0:00</span>
+                        <span id="totalTime6">3:53</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#goldModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="goldModal" tabindex="-1" aria-labelledby="goldModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="goldModalLabel">Gold in the Wreckage</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/1200x/d0/b3/70/d0b370ec90d87503f078bafb6107d60f.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn6">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Gold In The Wreckage</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn6">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon6">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon6" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio6" controls style="width: 100%;">
-                                    <source src="Gold In The Wreckage.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn6">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/1200x/7e/b4/be/7eb4becaeed5629a566f4d46147657f4.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Eye Smile</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 7 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/1200x/7e/b4/be/7eb4becaeed5629a566f4d46147657f4.jpg"
+                        alt="Track 7 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Eye Smile</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar7">
+                        <div class="progress-fill" id="progressFill7">
+                            <div class="progress-knob" id="progressKnob7"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime7">0:00</span>
+                        <span id="totalTime7">3:30</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#smileModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="smileModal" tabindex="-1" aria-labelledby="smileModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="smileModalLabel">Eye Smile</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/1200x/7e/b4/be/7eb4becaeed5629a566f4d46147657f4.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn7">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Eye Smile</h6>
-                                <p class="text-success mb-3">Khushi</p>
+                    <button class="control-btn play-btn" id="playBtn7">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon7">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon7" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
 
-                                <audio id="audio7" controls style="width: 100%;">
-                                    <source src="Eye Smile.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn" id="nextBtn7">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm song-card"> <img
-                    src="https://i.pinimg.com/1200x/08/f4/75/08f47593baebfb8912a121ac98bbeda8.jpg" alt=""
-                    class="bd-placeholder-img card-img-top" height="225" preserveAspectRatio="xMidYMid slice" role="img"
-                    width="100%">
-                <div class="card-body">
-                    <p class="card-text text-danger h5">Soft Brown Eyes</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group"> <button type="button"
-                                class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div> <small class="text-body-secondary">9 mins</small>
+
+            <!-- Track 8 -->
+            <div class="music-player">
+                <div class="playing-from">Playing from your music</div>
+
+                <div class="album-art">
+                    <img src="https://i.pinimg.com/1200x/08/f4/75/08f47593baebfb8912a121ac98bbeda8.jpg"
+                        alt="Track 8 Album Art">
+                </div>
+
+                <div class="track-info">
+                    <div class="track-title">Soft Brown Eyes</div>
+                    <div class="track-artist">Khushi</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar8">
+                        <div class="progress-fill" id="progressFill8">
+                            <div class="progress-knob" id="progressKnob8"></div>
+                        </div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime8">0:00</span>
+                        <span id="totalTime8">3:14</span>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-outline-danger my-3 mx-5" data-bs-toggle="modal"
-                data-bs-target="#brownModal">
-                Play/Pause The Song
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="brownModal" tabindex="-1" aria-labelledby="brownModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-danger" id="brownModalLabel">Soft Brown Eyes</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body d-flex justify-content-between p-4 gap-4">
-                            <div class="flex-shrink-0">
-                                <img src="https://i.pinimg.com/1200x/08/f4/75/08f47593baebfb8912a121ac98bbeda8.jpg"
-                                    alt="Album Art" class="img-fluid rounded-3" style="width: 300px;">
-                            </div>
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn8">P
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                        </svg>
+                    </button>
 
-                            <div class="flex-grow-1">
-                                <h6 class="text-danger mb-2">Soft Brown Eyes</h6>
-                                <p class="text-success mb-3">Khushi</p>
-
-                                <audio id="audio8" controls style="width: 100%;">
-                                    <source src="Soft Brown Eyes.mp3" type="audio/mp3">
-                                </audio>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
+                    <button class="control-btn play-btn" id="playBtn8">P
+                        <svg class="play-icon" viewBox="0 0 24 24" id="playIcon8">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" id="pauseIcon8" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="nextBtn8">N
+                        <svg class="control-icon" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -461,38 +664,446 @@
         <p class="text-warning text-center">© 2025–2026 Midnight Echoes, Inc. All rights reserved.
         </p>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-    <script>
-        const modals = [
-            { modalId: 'exampleModal', audioId: 'audio1' },
-            { modalId: 'stardustModal', audioId: 'audio2' },
-            { modalId: 'FarModal', audioId: 'audio3' },
-            { modalId: 'roseModal', audioId: 'audio4' },
-            { modalId: 'midnightModal', audioId: 'audio5' },
-            { modalId: 'goldModal', audioId: 'audio6' },
-            { modalId: 'smileModal', audioId: 'audio7' },
-            { modalId: 'brownModal', audioId: 'audio8' }
+    <audio id="audioPlayer" preload="metadata"></audio>
 
-        ];
 
-        modals.forEach(({ modalId, audioId }) => {
-            const modal = document.getElementById(modalId);
-            const audio = document.getElementById(audioId);
+   <script>
+    const audioSources = [
+        'My Baby Angel.mp3',
+        'Made of stardust and fire.mp3',
+        'Far Apart.mp3',
+        'The Rose and The Heart.mp3',
+        'Midnight Drapes.mp3',
+        'Gold In The Wreckage.mp3',
+        'Eye Smile.mp3',
+        'Soft Brown Eyes.mp3',
+    ];
 
-            if (modal && audio) {
-                modal.addEventListener('shown.bs.modal', () => {
-                    audio.play();
-                });
+    class MusicPlayer {
+        constructor(playerId) {
+            this.playerId = playerId;
+            this.isPlaying = false;
+            this.currentTimeValue = 0;
+            this.duration = 0;
+            this.progress = 0;
 
-                modal.addEventListener('hidden.bs.modal', () => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                });
+            this.initializeElements();
+            this.createAudioElement();
+            this.setupEventListeners();
+            this.updateDisplay();
+        }
+
+        initializeElements() {
+            this.playBtn = document.getElementById(`playBtn${this.playerId}`);
+            this.prevBtn = document.getElementById(`prevBtn${this.playerId}`);
+            this.nextBtn = document.getElementById(`nextBtn${this.playerId}`);
+            this.playIcon = document.getElementById(`playIcon${this.playerId}`);
+            this.pauseIcon = document.getElementById(`pauseIcon${this.playerId}`);
+            this.progressBar = document.getElementById(`progressBar${this.playerId}`);
+            this.progressFill = document.getElementById(`progressFill${this.playerId}`);
+            this.progressKnob = document.getElementById(`progressKnob${this.playerId}`);
+            this.currentTimeEl = document.getElementById(`currentTime${this.playerId}`);
+            this.totalTimeEl = document.getElementById(`totalTime${this.playerId}`);
+            this.trackTitle = this.playBtn.closest('.music-player').querySelector('.track-title');
+        }
+
+        createAudioElement() {
+            this.audioElement = document.createElement('audio');
+            this.audioElement.id = `audio${this.playerId}`;
+            this.audioElement.preload = 'metadata';
+            this.audioElement.crossOrigin = 'anonymous';
+
+            this.audioElement.src = audioSources[this.playerId - 1];
+
+            document.body.appendChild(this.audioElement);
+            this.setupAudioEventListeners();
+        }
+
+        generateDemoAudio(playerId) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const sampleRate = audioContext.sampleRate;
+            const duration = 30;
+            const numSamples = sampleRate * duration;
+            const buffer = audioContext.createBuffer(1, numSamples, sampleRate);
+            const channelData = buffer.getChannelData(0);
+
+            const baseFreq = 220 + (playerId * 55);
+
+            for (let i = 0; i < numSamples; i++) {
+                const t = i / sampleRate;
+                const freq = baseFreq * (1 + 0.1 * Math.sin(t * 0.5));
+                channelData[i] = 0.3 * Math.sin(2 * Math.PI * freq * t) * Math.exp(-t * 0.1);
+            }
+
+            const offlineContext = new OfflineAudioContext(1, numSamples, sampleRate);
+            const source = offlineContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(offlineContext.destination);
+            source.start();
+
+            return offlineContext.startRendering().then(renderedBuffer => {
+                const wav = this.bufferToWav(renderedBuffer);
+                return URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }));
+            });
+        }
+
+        bufferToWav(buffer) {
+            const length = buffer.length;
+            const arrayBuffer = new ArrayBuffer(44 + length * 2);
+            const view = new DataView(arrayBuffer);
+            const channelData = buffer.getChannelData(0);
+
+            const writeString = (offset, string) => {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            };
+
+            writeString(0, 'RIFF');
+            view.setUint32(4, 36 + length * 2, true);
+            writeString(8, 'WAVE');
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, buffer.sampleRate, true);
+            view.setUint32(28, buffer.sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(36, 'data');
+            view.setUint32(40, length * 2, true);
+
+            let offset = 44;
+            for (let i = 0; i < length; i++) {
+                const sample = Math.max(-1, Math.min(1, channelData[i]));
+                view.setInt16(offset, sample * 0x7FFF, true);
+                offset += 2;
+            }
+
+            return arrayBuffer;
+        }
+
+        setupAudioEventListeners() {
+            this.audioElement.addEventListener('loadedmetadata', () => {
+                this.duration = this.audioElement.duration || 180;
+                this.updateDisplay();
+            });
+
+            this.audioElement.addEventListener('timeupdate', () => {
+                if (this.isPlaying && !this.isDragging) {
+                    this.currentTimeValue = this.audioElement.currentTime;
+                    this.progress = this.currentTimeValue / this.duration;
+                    this.updateProgressDisplay();
+                }
+            });
+
+            // Removed auto-next on ended to prevent track switching
+            /*
+            this.audioElement.addEventListener('ended', () => {
+                this.nextTrack();
+            });
+            */
+
+            this.audioElement.addEventListener('error', (e) => {
+                console.warn(`Audio loading error for player ${this.playerId}:`, e);
+                this.duration = 180;
+                this.updateDisplay();
+            });
+
+            this.audioElement.addEventListener('canplay', () => {
+                if (this.duration === 0) {
+                    this.duration = this.audioElement.duration || 180;
+                    this.updateDisplay();
+                }
+            });
+        }
+
+        setupEventListeners() {
+            this.playBtn.addEventListener('click', () => this.togglePlay());
+            this.prevBtn.addEventListener('click', () => this.previousTrack());
+            this.nextBtn.addEventListener('click', () => this.nextTrack());
+            this.progressBar.addEventListener('click', (e) => this.seekTo(e));
+            this.setupProgressDrag();
+        }
+
+        setupProgressDrag() {
+            this.isDragging = false;
+
+            this.progressKnob.addEventListener('mousedown', (e) => {
+                this.isDragging = true;
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (this.isDragging) {
+                    this.handleProgressDrag(e);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (this.isDragging) {
+                    this.isDragging = false;
+                    this.audioElement.currentTime = this.currentTimeValue;
+                }
+            });
+        }
+
+        handleProgressDrag(e) {
+            const rect = this.progressBar.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const width = rect.width;
+            const newProgress = Math.max(0, Math.min(1, x / width));
+
+            this.progress = newProgress;
+            this.currentTimeValue = this.progress * this.duration;
+            this.updateProgressDisplay();
+        }
+
+        seekTo(e) {
+            const rect = this.progressBar.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const width = rect.width;
+            const newProgress = Math.max(0, Math.min(1, x / width));
+
+            this.progress = newProgress;
+            this.currentTimeValue = this.progress * this.duration;
+            this.audioElement.currentTime = this.currentTimeValue;
+            this.updateProgressDisplay();
+
+            this.progressBar.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                this.progressBar.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        async togglePlay() {
+            try {
+                if (this.isPlaying) {
+                    await this.audioElement.pause();
+                    this.isPlaying = false;
+                    this.playIcon.style.display = 'block';
+                    this.pauseIcon.style.display = 'none';
+                } else {
+                    this.stopOtherPlayers();
+
+                    await this.audioElement.play();
+                    this.isPlaying = true;
+                    this.playIcon.style.display = 'none';
+                    this.pauseIcon.style.display = 'block';
+
+                    this.playBtn.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.playBtn.style.transform = 'scale(1.08)';
+                    }, 150);
+                }
+            } catch (error) {
+                console.warn(`Playback error for player ${this.playerId}:`, error);
+                if (error.name === 'NotAllowedError') {
+                    this.showPlaybackMessage('Click to enable audio playback');
+                }
+            }
+        }
+
+        showPlaybackMessage(message) {
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 10000;
+        font-size: 14px;
+    `;
+            document.body.appendChild(messageEl);
+
+            setTimeout(() => {
+                messageEl.remove();
+            }, 3000);
+        }
+
+        stopOtherPlayers() {
+            window.musicPlayers.forEach(player => {
+                if (player.playerId !== this.playerId && player.isPlaying) {
+                    player.audioElement.pause();
+                    player.isPlaying = false;
+                    player.playIcon.style.display = 'block';
+                    player.pauseIcon.style.display = 'none';
+                }
+            });
+        }
+
+        previousTrack() {
+            // Just rewind to start, no track change
+            this.audioElement.currentTime = 0;
+            this.progress = 0;
+            this.currentTimeValue = 0;
+            this.updateProgressDisplay();
+
+            this.prevBtn.style.transform = 'scale(1.2) rotate(-10deg)';
+            setTimeout(() => {
+                this.prevBtn.style.transform = 'scale(1) rotate(0deg)';
+            }, 200);
+        }
+
+        nextTrack() {
+            // Just rewind to start, no track change
+            this.audioElement.currentTime = 0;
+            this.progress = 0;
+            this.currentTimeValue = 0;
+            this.updateProgressDisplay();
+
+            this.nextBtn.style.transform = 'scale(1.2) rotate(10deg)';
+            setTimeout(() => {
+                this.nextBtn.style.transform = 'scale(1) rotate(0deg)';
+            }, 200);
+        }
+
+        // Removed generateNewTrack since we won't auto change tracks anymore
+
+        updateProgressDisplay() {
+            const progressPercent = this.progress * 100;
+            this.progressFill.style.width = `${progressPercent}%`;
+
+            this.currentTimeEl.textContent = this.formatTime(this.currentTimeValue);
+            this.totalTimeEl.textContent = this.formatTime(this.duration);
+        }
+
+        updateDisplay() {
+            this.updateProgressDisplay();
+        }
+
+        formatTime(seconds) {
+            if (!seconds || isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        destroy() {
+            if (this.audioElement) {
+                this.audioElement.pause();
+                this.audioElement.remove();
+            }
+        }
+    }
+
+    // Initialize all music players when page loads
+    window.musicPlayers = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        for (let i = 1; i <= 8; i++) {
+            const player = new MusicPlayer(i);
+            window.musicPlayers.push(player);
+        }
+        addGlobalEffects();
+
+        window.addEventListener('beforeunload', () => {
+            window.musicPlayers.forEach(player => player.destroy());
+        });
+    });
+
+    function addGlobalEffects() {
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.marginLeft = '-10px';
+                ripple.style.marginTop = '-10px';
+
+                this.style.position = 'relative';
+                this.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .music-player:hover .album-art {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95) !important;
+        }
+        
+        .progress-knob:hover {
+            transform: translateY(-50%) scale(1.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+        }
+        
+        .progress-knob:active {
+            transform: translateY(-50%) scale(1.3);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.6);
+        }
+        
+        .music-player.playing {
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+    `;
+        document.head.appendChild(style);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                const playingPlayer = window.musicPlayers.find(p => p.isPlaying);
+                if (playingPlayer) {
+                    playingPlayer.togglePlay();
+                } else {
+                    window.musicPlayers[0].togglePlay();
+                }
             }
         });
-    </script>
+
+        document.querySelectorAll('.music-player').forEach((player, index) => {
+            player.addEventListener('wheel', function (e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    const audioElement = window.musicPlayers[index].audioElement;
+                    const volumeChange = e.deltaY > 0 ? -0.1 : 0.1;
+                    audioElement.volume = Math.max(0, Math.min(1, audioElement.volume + volumeChange));
+                }
+            });
+        });
+
+        console.log('🎵 Music Player Grid with Real Audio Loaded!');
+        console.log('✨ Features:');
+        console.log('   • Real audio playback with generated demo sounds');
+        console.log('   • Click play/pause buttons to control playback');
+        console.log('   • Click anywhere on progress bar to seek');
+        console.log('   • Drag the progress knob for precise control');
+        console.log('   • Previous/Next buttons only rewind current track, no switching');
+        console.log('   • Press SPACEBAR to toggle play/pause');
+        console.log('   • Ctrl + Mouse wheel to adjust volume');
+        console.log('   • Only one player can play at a time');
+        console.log('   • No auto-next on track end');
+        console.log('💡 To use your own audio files, replace the audio sources in createAudioElement()');
+    }
+</script>
 
 </body>
 
