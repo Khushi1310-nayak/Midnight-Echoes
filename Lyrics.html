@@ -4,12 +4,79 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Playlist</title>
+    <link rel="icon" sizes="32x32" type="image/png"
+        href="https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png">
+
+    <title>My Playlist - Lyrics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <style>
+        .glow-card {
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-card:hover {
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4),
+                0 0 80px rgba(147, 112, 219, 0.5),
+                0 0 120px rgba(138, 43, 226, 0.3),
+                0 0 160px rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+
+        .card-img-top {
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+
+        .btn-outline-danger {
+            position: relative;
+            color: #e0d8ff;
+            border-color: #bb99ff;
+            transition: color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+            box-shadow:
+                0 0 6px #bb99ff,
+                0 0 12px #d4c1ff,
+                0 0 20px #f5f0ff;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn-outline-danger:hover,
+        .btn-outline-danger:focus {
+            color: white;
+            border-color: #d4bfff;
+            box-shadow:
+                0 0 12px #bb99ff,
+                0 0 24px #d4c1ff,
+                0 0 40px #f5f0ff;
+            background: linear-gradient(45deg, #7f5af0, #a065f7, #c9a2ff);
+            text-shadow: 0 0 8px #e9d7ff;
+            transform: scale(1.1) translateY(-3px);
+            z-index: 10;
+        }
+
+        .card-text.text-danger {
+            color: #d6caff;
+            text-shadow:
+                0 0 5px #bb99ff,
+                0 0 10px #d4bfff,
+                0 0 15px #d8bfff;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .card-text.text-danger:hover {
+            color: #fff;
+            text-shadow:
+                0 0 10px #bb99ff,
+                0 0 20px #d4bfff,
+                0 0 30px #f0eaff;
+        }
+    </style>
 </head>
 
-<body class="bg-dark">
+<body style="background-color: #2c2c3a;">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
@@ -38,10 +105,7 @@
                         <a class="nav-link" href="Contact.html">Contact Me</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-danger" type="submit">Search</button>
-                </form>
+
             </div>
         </div>
     </nav>
