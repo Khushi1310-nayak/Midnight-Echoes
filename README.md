@@ -1,58 +1,60 @@
-Midnight Echoes — My Personal Songs & Playlist Page
-Welcome to Midnight Echoes, a sleek and stylish web page that’s all about my own songs and curated playlists. Designed with love, passion, and a dash of midnight mystery, this site invites listeners to dive into the sounds and lyrics that move my soul.
+🎶 Midnight Echoes
 
-💿 About This Project
-Midnight Echoes is a personal music hub where you can explore my original songs, browse my own heartfelt lyrics, and connect with me directly. The vibe is smooth, dark, and atmospheric — perfect for late-night listening sessions.
+A personal music-themed website built with HTML, CSS, and Bootstrap 5, showcasing playlists, lyrics, and song vibes.
+This project is designed with a dark aesthetic, interactive carousel banners, and categorized song sections.
 
-Built with:
+✨ Live Demo : https://khushi1310-nayak.github.io/Midnight-Echoes/
 
-HTML5 & CSS3 — for structure and style
+🚀 Features
 
-Bootstrap 5 — for responsive, mobile-friendly layouts and slick components like the carousel and navbar
+🎼 Navigation Bar – Quick access to Home, Songs, Lyrics, and Contact pages.
 
-Custom colors & fonts — dark theme with neon-like reds, greens, and yellows to make everything pop at night
+🎥 Image Carousel – Sliding banners with buttons linking to songs and lyrics.
 
-External links — to dive deeper into genres like Pop and Hip-Hop through Wikipedia
+🎤 Music Categories – Highlighted sections for Pop and Hip-Hop music with description and visuals.
 
-🎧 Features
-Responsive Navbar with links to Home, Songs, Lyrics, and Contact pages
+🌙 Dark Themed UI – Smooth and modern dark background design.
 
-Carousel Slider with fade effect showcasing featured images and calls-to-action for exploring songs and lyrics
+📱 Responsive Layout – Works across desktop and mobile screens with Bootstrap 5.
 
-Songs Page: A collection of my own original songs to vibe to
+🛠️ Tech Stack
 
-Lyrics Page: Display of my own personal lyrics laid out beautifully
+HTML5 – Semantic markup
 
-Contact Page: A fully functional contact form to slide into my DMs
+CSS3 – Styling and customization
 
-Two main content cards introducing Pop and Hip-Hop playlists with images and quick descriptions
+Bootstrap 5 – Responsive design & components
 
-Footer with copyright info to keep things professional
+📸 Preview
 
-Easy navigation and visually soothing dark mode aesthetic that fits your late-night music vibe
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/ac37a562-3a96-4abd-82b0-14bc86ee6802" />
+<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/4350a833-b673-481e-92b7-fe1c848bc0d7" />
 
-🛠️ How to Use
-Clone or download the repo.
+📂 Project Structure
+.
+├── index.html        # Homepage with carousel & categories
+├── Songs.html        # Songs listing page
+├── Lyrics.html       # Lyrics section
+├── Contact.html      # Contact details page
+└── assets/           # (optional) images, css, js
 
-Open index.html in any modern browser.
+💡 How to Use
 
-Explore the carousel and click the buttons to visit Songs, Lyrics, or Contact pages.
+Clone this repository:
 
-Navigate the playlists section to get inspired by different genres.
+git clone https://github.com/Khushi1310-nayak/Midnight-Echoes
 
-Customize or add your own songs, images, or pages to make it even more you.
 
-💡 Future Improvements
-Implement dark mode toggle for even cooler nighttime browsing
+Open index.html in your browser.
 
-Add animations or interactive lyrics for an immersive experience
+Explore 🎶
 
-📝 Credits
-Bootstrap 5 (https://getbootstrap.com/)
+🌟 Future Improvements
 
-Images sourced from Unsplash & Pinterest
+Add a dark/light mode toggle.
 
-Inspiration from late-night moods and personal music passion
+Enhance with React or Node.js for dynamic content.
 
-📫 Contact
-Want to collab, share feedback, or just vibe? Hit me up through the Contact page linked in the navbar — I’ve got a working contact form ready to catch all your sweet messages.
+📜 License
+
+This project is licensed under the MIT License – free to use and modify.
