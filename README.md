@@ -30,20 +30,11 @@ Bootstrap 5 – Responsive design & components
 <img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/ac37a562-3a96-4abd-82b0-14bc86ee6802" />
 <img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/4350a833-b673-481e-92b7-fe1c848bc0d7" />
 
-📂 Project Structure
-.
-├── index.html        # Homepage with carousel & categories
-├── Songs.html        # Songs listing page
-├── Lyrics.html       # Lyrics section
-├── Contact.html      # Contact details page
-└── assets/           # (optional) images, css, js
-
 💡 How to Use
 
 Clone this repository:
 
 git clone https://github.com/Khushi1310-nayak/Midnight-Echoes
-
 
 Open index.html in your browser.
 
